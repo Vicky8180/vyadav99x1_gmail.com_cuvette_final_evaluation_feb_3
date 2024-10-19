@@ -221,13 +221,60 @@
 }
 
 .board_cells {
-    width: 40vh;
+    /* width: 40vh */
+    width: 43vh;  
     height: 79vh;
     border-radius: 0.7vh;
     background-color: rgba(238, 242, 245, 1);
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content:flex-start;
+    gap:2vh
+}
+.board_cell_heading{
+    display: flex;
+    justify-content: space-between;
+    padding-left: 1.5vh;
+    padding-right: 1.5vh;
+    padding-top: 2vh;
+    width: 90%;
+}
+.board_cells_left{
+    font-size: 2vh;
+    font-weight: 500;
+    color: rgb(0, 0, 0);
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
 }
 
+.cells_card_container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+    max-height: 72vh;   
+    overflow-y: auto; 
+}
+
+.add_task_cell{
+    width:2.5vh;
+    height: 2.5vh;
+}
+
+.collapse_task_cell{
+    width: 3vh;
+    height: 3vh;
+}
+.board_cell_right{
+    display: flex;
+    align-items: center;
+    gap:2vh
+}
 
 .board_cell_container::-webkit-scrollbar-button {
     display: none;
@@ -255,12 +302,87 @@
 
 
 
-.board_cell_container::-webkit-scrollbar-track-piece {
+.cells_card_container::-webkit-scrollbar-track-piece {
     background-color: #f0f0f0;
 }
 
-.board_cell_container::-webkit-scrollbar-corner {
+.cells_card_container::-webkit-scrollbar-corner {
     background: #f0f0f0;
 }
 
 
+
+
+.cells_card_container::-webkit-scrollbar-button {
+    display: none;
+}
+
+
+.cells_card_container::-webkit-scrollbar {
+    width: 1.5vh;
+    height: 1.5vh; 
+}
+
+.cells_card_container::-webkit-scrollbar-track {
+    background: white 
+}
+
+
+.cells_card_container::-webkit-scrollbar-thumb {
+    background-color:  rgba(156, 183, 197, 1);
+   
+    border-radius: 10px; 
+    border: 2px solid transparent; 
+    background-clip: padding-box; 
+}
+
+
+
+
+.cells_card_container::-webkit-scrollbar-track-piece {
+    background-color: #f0f0f0;
+}
+
+.cells_card_container::-webkit-scrollbar-corner {
+    background: #f0f0f0;
+}
+
+
+
+
+
+
+
+
+
+
+.add_task_cell {
+ 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    transition: transform 0.5s ease-in-out;
+    position: relative; 
+  }
+  
+  .add_task_cell:hover {
+    transform: rotate(180deg);
+    animation: sparkle 2s infinite;
+    cursor: pointer;
+  }
+  
+  @keyframes sparkle {
+    0%, 100% {
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 
+                  0 0 20px rgba(255, 255, 255, 0.3), 
+                  0 0 30px rgba(255, 255, 255, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 
+                  0 0 40px rgba(255, 255, 255, 0.6), 
+                  0 0 50px rgba(255, 255, 255, 0.4);
+    }
+  }

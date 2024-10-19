@@ -177,21 +177,18 @@
 
 .form_email:focus{
   border-color: rgb(97, 97, 97); 
-  /* background-color: rgb(240, 240, 240); */
   outline: none;
 
 }
 
 .form_name:focus{
   border-color: rgb(94, 94, 94); 
-  /* background-color: rgb(240, 240, 240);  */
   outline: none;
 
   
 }
 .form_password:focus{
   border-color: rgb(123, 123, 123); 
-  /* background-color: rgb(240, 240, 240);  */
   outline: none;
   
 
