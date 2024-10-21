@@ -10,13 +10,13 @@
     width: 67vh;
     overflow-y: auto;
     position: absolute;
-    left: 17vh;
-    top: 35vh;
+    left: 16.5vh;
+    top:  32.4vh;;
     background-color: white;
   }
   
   .suggestion-item {
-    padding: 1vh;
+    /* padding: 1vh; */
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -33,9 +33,27 @@
    align-items: center;
    display: flex;
    justify-content: center;
+
+
+   font-weight: 600;
+   font-size: 2vh;
+   font-family: "Open Sans", sans-serif;
+   font-optical-sizing: auto;
+   font-style: normal;
+   font-variation-settings:
+     "wdth" 100;
   }
   .suggestion_item_email{
     margin-right: 5vh;
+
+
+    font-weight: 600;
+    font-size: 2vh;
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100;
   }
   .suggestion_item_button{
     background-color:rgb(255, 255, 255);
@@ -58,3 +76,26 @@
   .suggestion_item_button:hover {
     background-color: #f0f0f0;
   }
+
+
+  .suggestions-list::-webkit-scrollbar-button {
+    display: none;
+}
+
+
+.suggestions-list::-webkit-scrollbar {
+    width: 1.3vh;
+    height: 1.3vh; 
+}
+
+.suggestions-list::-webkit-scrollbar-track {
+    background: white 
+}
+
+.suggestions-list::-webkit-scrollbar-thumb {
+    background-color:  rgb(171, 211, 232);
+   
+    border-radius: 10px; 
+    border: 2px solid transparent; 
+    background-clip: padding-box; 
+}

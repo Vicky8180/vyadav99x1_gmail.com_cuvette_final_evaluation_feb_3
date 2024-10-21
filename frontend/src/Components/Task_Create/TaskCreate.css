@@ -1,5 +1,5 @@
 .task_create_container{
-    height: 60vh;
+    height: 66vh;
     width: 80vh;
     background-color:  rgba(255, 255, 255, 1);
     padding: 4vh;
@@ -11,9 +11,12 @@
 }
 .task_c_title{
     padding-bottom: 2vh;
+    display: flex;
+    flex-direction: column;
+    gap:1vh;
 }
 
-.task_c_title label, .task_c_priority_left,.task_c_assign label,.task_c_checklist,.task_c_add_checklist{
+.task_c_title label , .task_c_priority_left,.task_c_assign label,.task_c_checklist,.task_c_add_checklist{
 
     font-weight: 500;
     font-size: 2vh;
@@ -33,18 +36,21 @@
     border: 0.2vh solid rgba(208, 208, 208, 1);
     border-radius: 0.8vh;
   
+    font-weight: 500;
+font-size: 1.8vh;
     font-family: "Open Sans", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
     font-variation-settings:
       "wdth" 100;
+
 }
 
 .task_c_title_input::placeholder{
   
 font-size: 1.7vh;
 padding-left: 1vh; 
-  
+font-weight: 500;
     font-family: "Open Sans", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
@@ -89,7 +95,7 @@ align-items: center;
     align-items: center;
 
     background-color:rgb(255, 255, 255);
-    height: 4.5vh;
+    height: 4.2vh;
     border: 0.1vh solid rgba(226, 226, 226, 1);
     border-radius: 1.3vh;
     color: rgba(112, 112, 112, 1);
@@ -103,13 +109,16 @@ align-items: center;
     align-items: center;
 
     background-color:rgb(255, 255, 255);
-    height: 4.5vh;
+    height: 4.2vh;
     border: 0.1vh solid rgba(226, 226, 226, 1);
     border-radius: 1.3vh;
     color: rgba(112, 112, 112, 1);
     width: 22vh;
     font-size: 1.8vh;
     cursor: pointer;
+}
+.task_c_priority_right_item1:hover,.task_c_priority_right_item2:hover,.task_c_priority_right_item3:hover{
+    background-color: rgba(238, 236, 236, 1);
 }
 .task_c_priority_right span{
     width: 1vh;
@@ -122,6 +131,78 @@ align-items: center;
 
     
 }
+
+.task_c_display_assigns{
+
+    display: flex;
+    justify-content:flex-start;
+    align-items: center;
+    gap: 2vh;
+
+    padding-bottom: 2vh;
+    width: 100%;
+   
+    background-size: 2.5vh 2.5vh; 
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100;
+
+      overflow-x: auto; /* Enables horizontal scrolling */
+      white-space: nowrap; /* Prevents the content from wrapping to the next line */
+      scrollbar-width: none; /* Hides scrollbar for Firefox */
+      -ms-overflow-style: none;
+}
+.task_c_display_assigns::-webkit-scrollbar {
+    display: none; /* Hides scrollbar for Chrome, Safari, and Edge */
+  }
+  
+.task_c_display_assigns_item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    flex: 0 0 auto;
+
+    background-color:rgb(255, 255, 255);
+    height: 3.8vh;
+    border: 0.1vh solid rgba(226, 226, 226, 1);
+    border-radius: 1.3vh;
+    color: rgba(112, 112, 112, 1);
+    width: 13vh;
+    min-width: 13vh;
+    font-size: 1.5vh;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.task_c_display_assigns_item:hover{
+    /* background-color: rgba(207, 54, 54, 1); */
+    color: rgba(207, 54, 54, 1);
+    border: 0.1vh solid rgba(207, 54, 54, 1);
+}
+
+.s2 {
+    display: none; 
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100;
+
+      font-weight: 600;
+      font-size: 2vh;
+  }
+  
+  .task_c_display_assigns_item:hover .s1 {
+    display: none;
+  }
+  
+  .task_c_display_assigns_item:hover .s2 {
+    display: inline; 
+  }
+
 .task_c_assign{
     padding-bottom: 2vh;
     display:flex;
@@ -135,7 +216,7 @@ align-items: center;
     display: flex;
     flex-direction: column;
     gap:2vh;
-    max-height: 22vh;
+    max-height: 20vh;
     background-color: white;
     overflow-y: auto;  
     overflow-x: hidden;
@@ -257,26 +338,34 @@ height: 2vh;
 }
 
 
-
+/* .task_c_footer_part{
+    display: flex;
+    
+} */
 
 .task_c_footer{
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
-
+.task_c_footer_left{
+    display: flex;
+    gap: 2.5vh;
+    align-items: center;
+}
 .task_c_f_l_btn1{
     background-color:rgb(255, 255, 255);
     height: 4.5vh;
     border: 0.1vh solid rgba(226, 226, 226, 1);
     border-radius: 1.3vh;
     color: rgba(112, 112, 112, 1);
-    width: 12vw;
+    width: 21vh;
     font-size: 1.8vh;
     cursor: pointer;
 
     font-weight: 600;
-  font-size: 2vh;
+
   font-family: "Open Sans", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
@@ -287,6 +376,7 @@ height: 2vh;
 .task_c_footer_right{
     display: flex;
     gap: 2.5vh;
+    align-items: center;
 }
 .task_c_f_r_btn1{
     background-color:rgb(255, 255, 255);
@@ -294,7 +384,7 @@ height: 2vh;
     border: 0.1vh solid rgba(207, 54, 54, 1);
     border-radius: 1.3vh;
     color: rgba(207, 54, 54, 1);
-    width: 10vw;
+    width:  17vh;;
     font-size: 1.8vh;
     cursor: pointer;
 
@@ -313,7 +403,7 @@ height: 2vh;
     border: none;
     border-radius: 1.3vh;
     color: rgba(255, 255, 255, 1);
-    width: 10vw;
+    width:  17vh;;
     font-size: 1.8vh;
     cursor: pointer;
 
@@ -361,3 +451,59 @@ height: 2vh;
 
 
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.date-input {
+    width: 100%;
+    border: none;
+    align-items: center;
+    text-align: center;
+    border-radius: 4px;
+  }
+
+  .react-datepicker__month-container{
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100;
+      color: rgba(112, 112, 112, 1);
+  }
+  
+.react-datepicker-popper {
+    z-index: 1;
+    line-height: 0;
+    margin-left: 4vh;
+}
+  .react-datepicker__input-container input {
+    width: 100%;
+    font-weight: 600;
+    font-size: 2vh;
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100;
+      color: rgba(112, 112, 112, 1);
+  }
+
+
+  
+.date-input:focus{
+    outline: none;
+}

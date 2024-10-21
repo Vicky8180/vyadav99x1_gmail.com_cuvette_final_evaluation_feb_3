@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 dotenv.config();
-// db();
+db();
 
 const allowedOrigins = [
   "http://localhost:3000",
@@ -35,7 +35,7 @@ app.use((req, res, next) => {
   }
 });
 
-// app.use("/api", require("./Router/routes"));
+app.use("/api", require("./Router/Routes"));
 
 app.listen(PORT, () => {
   console.log(`Server is running on port no ${PORT}`);
