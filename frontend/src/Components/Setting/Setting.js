@@ -5,9 +5,10 @@ import Loader from "../Loader/Loader";
 import Toast from "../../Services/Toast/Toast";
 import { useNavigate } from "react-router-dom";
 export default function Setting() {
+  const userId = JSON.parse(localStorage.getItem("userData"));
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    name: userId?userId.name:"",
+    email:userId?userId.email:"",
     oldPassword: "",
     newPassword: "",
   });
@@ -15,7 +16,7 @@ export default function Setting() {
   const [focusedField, setFocusedField] = useState("");
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
-  const userId = JSON.parse(localStorage.getItem("userData"));
+ 
   const navigate = useNavigate();
   const updateUserDetailAPI = async () => {
     setLoading(true);
