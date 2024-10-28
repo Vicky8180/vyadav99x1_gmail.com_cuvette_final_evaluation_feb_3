@@ -1,0 +1,55 @@
+.analytics_container {
+  display: flex;
+  flex-direction: column;
+  padding: 3vh;
+  gap: 2vh;
+}
+
+.analytics_data_box {
+  display: flex;
+  gap: 5vh;
+  min-width: 100vh;
+}
+
+.analytics_each_box {
+  width: 45vh;
+  background-color: rgba(249, 252, 255, 1);
+  border-radius: 2vh;
+  padding: 2vh;
+}
+
+.analytics_each_line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.3vh;
+  gap: 2vh;
+}
+
+.analytics_each_line:hover {
+  background-color: rgb(211 227 253);
+  border-radius: 1vh;
+}
+
+.analytics_heading,
+.analytics_number,
+.analytics_each_line div {
+  font-size: 1.9vh;
+  font-weight: 400;
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+.analytics_each_line div {
+  display: flex;
+  align-items: center;
+  gap: 2vh;
+}
+.analytics_dot {
+  width: 1.3vh;
+  height: 1.3vh;
+  border-radius: 50%;
+
+  background-color: rgba(144, 196, 204, 1);
+}

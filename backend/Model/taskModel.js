@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const Task_Schema = new mongoose.Schema(
@@ -19,6 +20,7 @@ const Task_Schema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId, 
           ref: "user" 
         },
+        name:{ type: String, require:true},
         when: { 
           type: String, 
 
@@ -47,9 +49,15 @@ const Task_Schema = new mongoose.Schema(
       trim: true 
     },
     dueDate: { 
-      type: Date  
-    }
+      type: Date  ,
+      default:null
+    },
+    creator:{   type: mongoose.Schema.Types.ObjectId, 
+      ref: "user" },
+    
+      backgroundColor:{ type: String, required: true, default:"white" }
   },
+  
   { 
     timestamps: true 
   }
