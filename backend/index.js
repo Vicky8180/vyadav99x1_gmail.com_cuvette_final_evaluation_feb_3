@@ -12,7 +12,7 @@ db();
 
 const allowedOrigins = [
   "http://localhost:3000",
-//   "https://share-story-x.vercel.app",
+  "https://taskmanager-topaz.vercel.app",
   "http://another-origin.com",
 ];
 
