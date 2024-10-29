@@ -36,43 +36,25 @@ export default function Board() {
   const userId = JSON.parse(localStorage.getItem("userData"));
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+
   const fetchTaskAPI = async () => {
-    console.log(process.env.REACT_APP_BASE_URL_PORT)
     try {
       const response = await axios.get(
-         `${process.env.REACT_APP_BASE_URL_PORT}/api/task/fetch?userId=${userId._id}`,
+        `${process.env.REACT_APP_BASE_URL_PORT}/api/task/fetch?userId=${userId._id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      const newTasks = response.data.tasks[0].tasks.reduce((acc, cur) => {
-        if (!acc[cur.category]) {
-          acc[cur.category] = [];
-        }
-
-        const taskAlreadyExists = acc[cur.category].some(
-          (task) => task._id === cur._id
-        );
-        if (!taskAlreadyExists) {
-          acc[cur.category].push(cur);
-        }
-
-        return acc;
-      }, {});
-
-      setTasks((prevTasks) => ({
-        ...prevTasks,
-        ...newTasks,
-      }));
+      setTasks(response.data.tasks);
     } catch (error) {
-      if (error.status === 401) {
-        Toast("Unauthoriized Access", false);
+      if (error.response?.status === 401) {
+        Toast("Unauthorized Access", false);
       } else {
         const errorMessage =
-        error.response?.data?.message || "An error occured in server!";
-      Toast(errorMessage, false)
+          error.response?.data?.message || "An error occurred in server!";
+        Toast(errorMessage, false);
       }
     }
   };
@@ -164,7 +146,7 @@ export default function Board() {
   const updateCategoryAPI = async (id, to) => {
     try {
       await axios.post(
-         `${process.env.REACT_APP_BASE_URL_PORT}/api/task/update/category`,
+        `${process.env.REACT_APP_BASE_URL_PORT}/api/task/update/category`,
         { taskId: id, category: to },
         {
           headers: {
@@ -189,7 +171,7 @@ export default function Board() {
       taskToMove.category = to;
       const updatedFromTasks = tasks[from].filter((item) => item._id !== data);
       const updatedToTasks = [...(tasks[to] || []), taskToMove];
-
+      trigerRender();
       setTasks((prevTasks) => ({
         ...prevTasks,
         [from]: updatedFromTasks,

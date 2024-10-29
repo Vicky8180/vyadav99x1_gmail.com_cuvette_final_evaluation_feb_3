@@ -186,7 +186,7 @@ white-space: nowrap;
 
 
 .checklist_input_textarea {
-    width: 100%;
+    width: 85%;
     resize: none;
     height: auto;
     box-sizing: border-box;
@@ -194,7 +194,7 @@ white-space: nowrap;
     overflow-wrap: break-word;
     word-wrap: break-word;
     padding: 1vh;
-    font-size: 2vh;
+    font-size: 1.8vh;;
     line-height: 2.8vh;
     margin-left: -0.9vh;
   }

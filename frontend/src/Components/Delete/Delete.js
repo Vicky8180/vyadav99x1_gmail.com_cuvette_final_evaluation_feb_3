@@ -4,6 +4,7 @@ export default function Delete({ close, confirmDelete, logout }) {
   const DeleteApi = () => {
     confirmDelete();
     close();
+   
   };
   return (
     <>

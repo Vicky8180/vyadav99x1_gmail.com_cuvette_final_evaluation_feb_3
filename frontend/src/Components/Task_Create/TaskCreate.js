@@ -158,10 +158,10 @@ export default function TaskCreate({
                       style={{
                         backgroundColor:
                           priority === "LOW PRIORITY"
-                            ? "green"
+                            ? "rgba(99, 192, 91, 1)"
                             : priority === "MODERATE PRIORITY"
-                            ? "orange"
-                            : "blue",
+                            ? "rgba(24, 176, 255, 1)"
+                            : "rgba(255, 36, 115, 1)",
                       }}
                     ></span>{" "}
                     {priority}

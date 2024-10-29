@@ -40,12 +40,30 @@ const Card = forwardRef(
       "HIGH PRIORITY": "rgba(255, 36, 115, 1)",
       "LOW PRIORITY": "rgba(99, 192, 91, 1)",
     };
+   
+    // const [selectedBackgroundColor, setSelectedBackgroundColor] = useState(
+    //   data.backgroundColor ||
+    //     localStorage.getItem(`cardColor_${data._id}`) ||
+    //     backgroundColors[indexOfColor]
+    // );
 
     const [selectedBackgroundColor, setSelectedBackgroundColor] = useState(
-      data?.backgroundColor ||
-        localStorage.getItem(`cardColor_${data._id}`) ||
-        backgroundColors[indexOfColor]
+      data.backgroundColor ||
+      localStorage.getItem(`cardColor_${data._id}`) ||
+      backgroundColors[indexOfColor]
     );
+    
+    useEffect(() => {
+      if (data.backgroundColor) {
+        setSelectedBackgroundColor(data.backgroundColor);
+      }
+    }, [data.backgroundColor, selectedBackgroundColor]);
+    
+
+
+
+
+
     const token = localStorage.getItem("token");
     const userId = JSON.parse(localStorage.getItem("userData"))._id;
     const dotColor = priorityColors[data.selectedPriority];
@@ -185,6 +203,7 @@ const Card = forwardRef(
         ? words[0][0] + words[1][0]
         : words[0].slice(0, 2);
     };
+   
 
     const updateBGColor = (colorIndex) => {
       const newColor = backgroundColors[colorIndex];
@@ -192,7 +211,9 @@ const Card = forwardRef(
       setIndexOfColor(colorIndex);
       localStorage.setItem(`cardColor_${data._id}`, newColor);
       updateBackgroundColorAPI(newColor);
+      trigerRender()
       toggleOptions();
+
     };
 
     useEffect(() => {
@@ -446,16 +467,21 @@ const Card = forwardRef(
                 className="card_footer_left"
                 style={{
                   backgroundColor:
+                  data.category==="Done"?" rgba(99, 192, 91, 1)":
+
                     new Date(data?.dueDate) < new Date()
                       ? "rgba(207, 54, 54, 1)"
                       : data.selectedPriority === "HIGH PRIORITY"
                       ? "rgba(207, 54, 54, 1)"
                       : "",
                   color:
+                  data.category==="Done"?"white":
                     new Date(data?.dueDate) < new Date() ||
                     data.selectedPriority === "HIGH PRIORITY"
                       ? "white"
                       : "",
+
+
                 }}
               >
                 {data ? formatDate(data.dueDate) : ""}

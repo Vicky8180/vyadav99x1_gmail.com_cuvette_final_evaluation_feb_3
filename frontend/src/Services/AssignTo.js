@@ -34,7 +34,7 @@ export default function AssignTo({ disableLabel, data }) {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/api/search?searchTerm=${inputValue}`
+        `${process.env.REACT_APP_BASE_URL_PORT}/api/search?searchTerm=${inputValue}`
       );
       setSuggestions(() => {
         const newData = response.data.results.filter((item) => {
@@ -48,7 +48,7 @@ export default function AssignTo({ disableLabel, data }) {
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
-        "An error occurred while saving the task. Please try again.";
+        "An error occurred while suggestion users!";
       Toast(errorMessage, false);
     } finally {
       setLoading(false);

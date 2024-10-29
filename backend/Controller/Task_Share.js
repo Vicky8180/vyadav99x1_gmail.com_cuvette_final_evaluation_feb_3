@@ -34,7 +34,7 @@ const generateSharableUrl = async (req, res) => {
           .json({ message: "Error in Generating URL", error: "", data: "" });
       }
   
-      const url = `http://localhost:3000/api/task/share/${uniqueId}`;
+      const url = `https://taskmanager-topaz.vercel.app/api/task/share/${uniqueId}`;
       return res
         .status(200)
         .json({

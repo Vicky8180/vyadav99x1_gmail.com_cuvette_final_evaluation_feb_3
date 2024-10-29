@@ -19,12 +19,10 @@ const createTask = async (req, res) => {
       ownerId,
     } = req.body;
     if (!title || !selectedPriority || !checklist) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Required fields: title, selectedPriority, and checklist are missing",
-        });
+      return res.status(400).json({
+        message:
+          "Required fields: title, selectedPriority, and checklist are missing",
+      });
     }
     const owner = await User_Model.findById(ownerId);
     if (!owner) {
@@ -79,6 +77,7 @@ const createTask = async (req, res) => {
 const assignToMultipleUsers = async (req, res) => {
   try {
     const { assignFrom, assignTo } = req.body;
+
     if (
       !assignFrom ||
       !assignTo ||
@@ -104,11 +103,13 @@ const assignToMultipleUsers = async (req, res) => {
     if (userTasks.length === 0) {
       return res.status(400).json({
         success: false,
-        message: `No task found in dashboard!`,
+        message: `No tasks found in dashboard for user '${assignFrom}'!`,
       });
     }
+
     const assignToIds = assignTo.map(({ assignee }) => assignee);
     const usersToAssign = await User_Model.find({ _id: { $in: assignToIds } });
+
     if (usersToAssign.length !== assignTo.length) {
       return res.status(404).json({
         success: false,
@@ -133,11 +134,13 @@ const assignToMultipleUsers = async (req, res) => {
 
     const taskUpdatePromises = userTasks.map(async (task) => {
       const currentAssignTo = task.assignTo || [];
+
       const uniqueAssignTo = assignTo.reduce((acc, user) => {
-        const existingAssignee = currentAssignTo.find(
+        const isAlreadyAssigned = currentAssignTo.some(
           ({ assignee }) => assignee.toString() === user.assignee
         );
-        if (!existingAssignee) {
+
+        if (!isAlreadyAssigned && task.creator.toString() !== user.assignee) {
           acc.push({
             assignee: user.assignee,
             name: user.name,
@@ -164,7 +167,6 @@ const assignToMultipleUsers = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in assignToMultipleUsers:", error);
-
     return res.status(500).json({
       success: false,
       message: "An error occurred while assigning tasks.",
@@ -176,20 +178,34 @@ const assignToMultipleUsers = async (req, res) => {
 const fetchTasks = async (req, res) => {
   try {
     const { userId } = req.query;
-
-    const userWithTasks = await User_Model.find(
-      { _id: userId },
-      { password: 0 }
-    )
+    const userWithTasks = await User_Model.findById(userId, { password: 0 })
       .populate("tasks")
       .exec();
 
     if (!userWithTasks) {
       return res.status(404).json({ message: "User not found" });
     }
+    const categorizedTasks = userWithTasks.tasks.reduce(
+      (acc, task) => {
+        if (!acc[task.category]) {
+          acc[task.category] = [];
+        }
+
+        const taskExists = acc[task.category].some((t) =>
+          t._id.equals(task._id)
+        );
+        if (!taskExists) {
+          acc[task.category].push(task);
+        }
+
+        return acc;
+      },
+      { Backlog: [], Todo: [], Progress: [], Done: [] }
+    );
+
     return res.status(200).json({
       message: "Tasks fetched successfully",
-      tasks: userWithTasks,
+      tasks: categorizedTasks,
     });
   } catch (error) {
     console.error("Error fetching tasks:", error);
@@ -208,7 +224,6 @@ const editTask = async (req, res) => {
     dueDate,
     ownerId,
   } = req.body;
-  console.log(ownerId);
 
   if (
     !taskId ||
@@ -217,59 +232,38 @@ const editTask = async (req, res) => {
     !checklist ||
     checklist.length === 0
   ) {
-    return res
-      .status(400)
-      .json({
-        error:
-          "Title, selected priority, and at least one checklist item are required.",
-      });
+    return res.status(400).json({
+      error:
+        "Title, selected priority, and at least one checklist item are required.",
+    });
   }
 
   try {
     const formattedDueDate = dueDate ? new Date(dueDate) : null;
+    const existingTask = await Task_Model.findById(taskId).populate(
+      "assignTo.assignee"
+    );
 
-    const existingTask = await Task_Model.findById(taskId);
     if (!existingTask) {
       return res.status(404).json({ error: "Task not found." });
     }
 
+    const existingAssignToIds = existingTask.assignTo.map((assigneeObj) =>
+      assigneeObj.assignee._id.toString()
+    );
+
     const newAssignToIds = assignTo
-      ? assignTo.map((assigneeObj) => assigneeObj.assignee)
-      : [];
+      .map((assigneeObj) => assigneeObj.assignee.toString())
+      .filter((id) => id !== existingTask.creator.toString());
 
-    const existingAssignToTemp = existingTask.assignTo.map((id) => id);
-    const existingAssignTo = [];
-    for (let i = 0; i < existingAssignToTemp.length; i++) {
-      existingAssignTo.push(existingAssignToTemp[i].assignee.toString());
-    }
-
-    let usersToRemove = [];
-    let usersToAdd = [];
-
-    if (newAssignToIds.length > 0) {
-      usersToRemove = existingAssignTo.filter(
-        (id) => !newAssignToIds.includes(id.toString())
-      );
-      usersToAdd = newAssignToIds.filter(
-        (id) => !existingAssignTo.includes(id)
-      );
-    } else {
-      usersToRemove = existingAssignTo;
-    }
-
-    const usertoRemoveIds = [];
-    const usersToAddIds = [];
-
-    usersToRemove = usersToRemove.filter((id) => id !== ownerId);
-    usersToAdd = usersToAdd.filter((id) => id !== ownerId);
-    let assignTo2 = assignTo;
-    assignTo2 = assignTo2.filter((item) => item.assignee !== ownerId);
+    const usersToRemove = existingAssignToIds.filter(
+      (id) => !newAssignToIds.includes(id)
+    );
+    const usersToAdd = newAssignToIds.filter(
+      (id) => !existingAssignToIds.includes(id)
+    );
 
     if (usersToRemove.length > 0) {
-      for (let i = 0; i < usersToRemove.length; i++) {
-        usertoRemoveIds.push(usersToRemove[i].assignee);
-      }
-
       await User_Model.updateMany(
         { _id: { $in: usersToRemove } },
         { $pull: { tasks: taskId } }
@@ -277,15 +271,20 @@ const editTask = async (req, res) => {
     }
 
     if (usersToAdd.length > 0) {
-      for (let i = 0; i < usersToAdd.length; i++) {
-        usersToAddIds.push(usersToAdd[i].assignee);
-      }
-
       await User_Model.updateMany(
         { _id: { $in: usersToAdd } },
         { $addToSet: { tasks: taskId } }
       );
     }
+
+    const assignTo2 = assignTo.filter(
+      (item, index, self) =>
+        item.assignee.toString() !== existingTask.creator.toString() &&
+        index ===
+          self.findIndex(
+            (i) => i.assignee.toString() === item.assignee.toString()
+          )
+    );
 
     const updatedTask = await Task_Model.findByIdAndUpdate(
       taskId,
@@ -295,13 +294,17 @@ const editTask = async (req, res) => {
         assignTo: assignTo2,
         checklist,
         dueDate: formattedDueDate,
-        creator: ownerId,
       },
       { new: true, runValidators: true }
     );
+
     if (!updatedTask) {
       return res.status(404).json({ error: "Task update failed." });
     }
+
+    await User_Model.findByIdAndUpdate(existingTask.creator, {
+      $addToSet: { tasks: taskId },
+    });
 
     res.status(200).json({ message: "Task updated successfully", updatedTask });
   } catch (error) {
@@ -466,19 +469,15 @@ const checkAndUncheck = async (req, res) => {
         .json({ message: "Task or checklist item not found" });
     }
 
-    return res
-      .status(200)
-      .json({
-        message: "Checklist item updated successfully",
-        task: updatedTask,
-      });
+    return res.status(200).json({
+      message: "Checklist item updated successfully",
+      task: updatedTask,
+    });
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        message: "An error occurred while updating the checklist item",
-        error,
-      });
+    return res.status(500).json({
+      message: "An error occurred while updating the checklist item",
+      error,
+    });
   }
 };
 
@@ -494,7 +493,7 @@ const deleteTask = async (req, res) => {
     const usersToRemove = taskDetail.assignTo.map((item) => item.assignee);
 
     await User_Model.findOneAndUpdate(
-      { _id: userId },
+      { _id: taskDetail.creator },
       { $pull: { tasks: taskId } }
     );
 
@@ -504,11 +503,9 @@ const deleteTask = async (req, res) => {
     );
     await Task_Model.findByIdAndDelete(taskId);
 
-    res
-      .status(200)
-      .json({
-        message: "Task and associated user references deleted successfully",
-      });
+    res.status(200).json({
+      message: "Task and associated user references deleted successfully",
+    });
   } catch (error) {
     res
       .status(500)
