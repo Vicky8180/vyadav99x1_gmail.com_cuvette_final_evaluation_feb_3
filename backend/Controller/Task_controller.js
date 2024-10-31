@@ -248,65 +248,92 @@ const editTask = async (req, res) => {
       return res.status(404).json({ error: "Task not found." });
     }
 
-    const existingAssignToIds = existingTask.assignTo.map((assigneeObj) =>
-      assigneeObj.assignee._id.toString()
-    );
-
-    const newAssignToIds = assignTo
-      .map((assigneeObj) => assigneeObj.assignee.toString())
-      .filter((id) => id !== existingTask.creator.toString());
-
-    const usersToRemove = existingAssignToIds.filter(
-      (id) => !newAssignToIds.includes(id)
-    );
-    const usersToAdd = newAssignToIds.filter(
-      (id) => !existingAssignToIds.includes(id)
-    );
-
-    if (usersToRemove.length > 0) {
-      await User_Model.updateMany(
-        { _id: { $in: usersToRemove } },
-        { $pull: { tasks: taskId } }
+    if (existingTask.creator.toString() === ownerId) {
+      const existingAssignToIds = existingTask.assignTo.map((assigneeObj) =>
+        assigneeObj.assignee._id.toString()
       );
-    }
 
-    if (usersToAdd.length > 0) {
-      await User_Model.updateMany(
-        { _id: { $in: usersToAdd } },
-        { $addToSet: { tasks: taskId } }
+      const newAssignToIds = assignTo
+        .map((assigneeObj) => assigneeObj.assignee.toString())
+        .filter((id) => id !== existingTask.creator.toString());
+
+      const usersToRemove = existingAssignToIds.filter(
+        (id) => !newAssignToIds.includes(id)
       );
+      const usersToAdd = newAssignToIds.filter(
+        (id) => !existingAssignToIds.includes(id)
+      );
+
+      if (usersToRemove.length > 0) {
+        await User_Model.updateMany(
+          { _id: { $in: usersToRemove } },
+          { $pull: { tasks: taskId } }
+        );
+      }
+
+      if (usersToAdd.length > 0) {
+        await User_Model.updateMany(
+          { _id: { $in: usersToAdd } },
+          { $addToSet: { tasks: taskId } }
+        );
+      }
+
+      const assignTo2 = assignTo.filter(
+        (item, index, self) =>
+          item.assignee.toString() !== existingTask.creator.toString() &&
+          index ===
+            self.findIndex(
+              (i) => i.assignee.toString() === item.assignee.toString()
+            )
+      );
+
+      const updatedTask = await Task_Model.findByIdAndUpdate(
+        taskId,
+        {
+          title,
+          selectedPriority,
+          assignTo: assignTo2,
+          checklist,
+          dueDate: formattedDueDate,
+        },
+        { new: true, runValidators: true }
+      );
+
+      if (!updatedTask) {
+        return res.status(404).json({ error: "Task update failed." });
+      }
+
+      await User_Model.findByIdAndUpdate(existingTask.creator, {
+        $addToSet: { tasks: taskId },
+      });
+
+      res
+        .status(200)
+        .json({ message: "Task updated successfully", updatedTask });
+    } else {
+      const updatedTask = await Task_Model.findByIdAndUpdate(
+        taskId,
+        {
+          title,
+          selectedPriority,
+          checklist,
+          dueDate: formattedDueDate,
+        },
+        { new: true, runValidators: true }
+      );
+
+      if (!updatedTask) {
+        return res.status(404).json({ error: "Task update failed." });
+      }
+
+      await User_Model.findByIdAndUpdate(existingTask.creator, {
+        $addToSet: { tasks: taskId },
+      });
+
+      res
+        .status(200)
+        .json({ message: "Task updated successfully", updatedTask });
     }
-
-    const assignTo2 = assignTo.filter(
-      (item, index, self) =>
-        item.assignee.toString() !== existingTask.creator.toString() &&
-        index ===
-          self.findIndex(
-            (i) => i.assignee.toString() === item.assignee.toString()
-          )
-    );
-
-    const updatedTask = await Task_Model.findByIdAndUpdate(
-      taskId,
-      {
-        title,
-        selectedPriority,
-        assignTo: assignTo2,
-        checklist,
-        dueDate: formattedDueDate,
-      },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedTask) {
-      return res.status(404).json({ error: "Task update failed." });
-    }
-
-    await User_Model.findByIdAndUpdate(existingTask.creator, {
-      $addToSet: { tasks: taskId },
-    });
-
-    res.status(200).json({ message: "Task updated successfully", updatedTask });
   } catch (error) {
     console.error("Error updating task:", error);
     res

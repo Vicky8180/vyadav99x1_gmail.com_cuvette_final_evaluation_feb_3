@@ -60,10 +60,6 @@ const Card = forwardRef(
     }, [data.backgroundColor, selectedBackgroundColor]);
     
 
-
-
-
-
     const token = localStorage.getItem("token");
     const userId = JSON.parse(localStorage.getItem("userData"))._id;
     const dotColor = priorityColors[data.selectedPriority];
@@ -156,6 +152,7 @@ const Card = forwardRef(
 
     const deleteTaskAPI = async () => {
       try {
+        console.log(checklist)
         await axios.post(
           `${process.env.REACT_APP_BASE_URL_PORT}/api/task/deletetask`,
           { taskId: data._id, userId: userId },
@@ -166,6 +163,8 @@ const Card = forwardRef(
           }
         );
         Toast("Task deleted Successfully", true)
+        setChecklist((prevChecklist) => prevChecklist.filter(task => task._id !== data._id));
+        console.log(checklist)
       } catch (error) {
         Toast(error.response.data.message, false);
       } finally {

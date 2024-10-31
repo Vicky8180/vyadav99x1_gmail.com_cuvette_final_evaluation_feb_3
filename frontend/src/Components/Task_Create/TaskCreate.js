@@ -22,6 +22,7 @@ export default function TaskCreate({
   const [selectedPriority, setSelectedPriority] = useState(
     data ? data.selectedPriority : ""
   );
+  const userData=JSON.parse(localStorage.getItem("userData"))
   const [title, setTitle] = useState(data ? data.title : "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -78,6 +79,7 @@ export default function TaskCreate({
 
       onTaskCreated();
       close();
+      setItems(items)
 
       Toast(
         isUpdate ? "Task updated successfully!" : "Task created successfully!",
@@ -169,8 +171,12 @@ export default function TaskCreate({
                 )
               )}
             </div>
-          </div>
-          <AssignTo data={data ? data.assignTo : ""} />
+          </div>  
+          {/* {console.log(data.creator === userData._id)}
+          {console.log(data.creator+" "+ userData._id)} */}
+          {(!data || data.creator === userData._id) ? <AssignTo data={data ? data.assignTo : ""} /> : null}
+
+         
           <div className="task_c_checklist">
             Checklist ({items.filter((item) => item.checkOrNot).length}/
             {items.length})
