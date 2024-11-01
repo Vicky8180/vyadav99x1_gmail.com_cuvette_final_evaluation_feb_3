@@ -96,7 +96,8 @@ white-space: nowrap;
     text-overflow: ellipsis;          
     white-space: normal;      
     word-wrap: break-word;
-  overflow-wrap: break-word;          
+  overflow-wrap: break-word;    
+  max-width: 35vh;      
 }
 
 

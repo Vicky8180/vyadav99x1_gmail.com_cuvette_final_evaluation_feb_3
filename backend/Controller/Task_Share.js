@@ -14,7 +14,7 @@ const generateSharableUrl = async (req, res) => {
       }
       const existingUrl = await Share_Url_Model.findOne({ taskId });
       if (existingUrl) {
-        const url = `http://localhost:3000/api/task/share/${existingUrl.urlId}`;
+        const url = `https://taskmanager-topaz.vercel.app/api/task/share/${existingUrl.urlId}`;
         return res
           .status(200)
           .json({
