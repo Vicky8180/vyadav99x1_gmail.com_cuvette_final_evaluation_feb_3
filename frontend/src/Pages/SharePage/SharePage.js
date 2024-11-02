@@ -94,7 +94,7 @@ export default function SharePage() {
                 </div>
 
                 <Tooltips text={data.taskId.title}>
-                  <div className="card_title">
+                  <div className="card_title" style={{maxWidth:"none"}}>
                     {data ? data.taskId.title : "Heading"}
                   </div>
                 </Tooltips>
@@ -170,16 +170,9 @@ export default function SharePage() {
   <div
     className="card_footer_left"
     style={{
-      backgroundColor:
-        new Date(data.taskId.dueDate) < new Date() ||
-        selectedPriority === "HIGH PRIORITY"
-          ? "rgba(207, 54, 54, 1)"
-          : "",
-      color:
-        new Date(data.taskId.dueDate) < new Date() ||
-        selectedPriority === "HIGH PRIORITY"
-          ? "white"
-          : "",
+      backgroundColor: "rgba(207, 54, 54, 1)",
+      color:"white"
+
     }}
   >
    {formatDate(data.taskId.dueDate)}
