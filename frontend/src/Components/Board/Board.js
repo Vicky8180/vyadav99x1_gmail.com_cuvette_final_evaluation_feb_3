@@ -98,13 +98,19 @@ export default function Board() {
         endDate = new Date(startDate);
         endDate.setDate(endDate.getDate() + 1);
         break;
+
       case "This Week":
-        const dayOfWeek = now.getDay();
-        startDate = new Date(now);
-        startDate.setDate(now.getDate() - dayOfWeek);
-        endDate = new Date(startDate);
-        endDate.setDate(endDate.getDate() + 7);
-        break;
+    const dayOfWeek = now.getDay();
+    startDate = new Date(now);
+
+    
+    startDate.setDate(now.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+    startDate.setHours(0, 0, 0, 0); 
+
+    endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 7);
+    break;
+
       case "This Month":
         startDate = new Date(now.getFullYear(), now.getMonth(), 1);
         endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
