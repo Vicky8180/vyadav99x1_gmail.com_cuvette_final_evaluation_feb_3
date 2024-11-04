@@ -28,6 +28,11 @@ const Card = forwardRef(
     const [toggleStateForTaskEdit, setToggleStateForTaskEdit] = useState(false);
     const [indexOfColor, setIndexOfColor] = useState(4);
     const [openDeletePortal, setOpenDeletePortal] = useState(false);
+
+
+    useEffect(() => {
+      setChecklist(data.checklist);
+    }, [data]);
     const backgroundColors = [
       "#d0bbf8",
       "#bbd0f8",

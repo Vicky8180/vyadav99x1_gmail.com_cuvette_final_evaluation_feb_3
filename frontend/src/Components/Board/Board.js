@@ -11,6 +11,7 @@ import AddPeople from "../AddPeople/AddPeople";
 import DropDownPNG from "../../Assets/dropdown.png";
 import Toast from "../../Services/Toast/Toast";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Board() {
   const [toggleStateForTaskCreate, setToggleStateForTaskCreate] =
@@ -30,6 +31,8 @@ export default function Board() {
     Progress: [],
     Done: [],
   });
+  
+
 
   const [filteredTasks, setFilteredTasks] = useState(tasks);
   const cardRefs = useRef({});
@@ -59,6 +62,10 @@ export default function Board() {
     }
   };
 
+  const TriggeringRendering=useSelector((state)=>state.TriggeringRenderingSlice).rendering
+  useEffect(()=>{
+    fetchTaskAPI();
+  },[TriggeringRendering])
   useEffect(() => {
     if (!toggleStateForTaskCreate && !toggleStateForAddPeople) {
       fetchTaskAPI();
@@ -227,7 +234,7 @@ export default function Board() {
         </div>
         <div className="board_heading_two">
           <div className="board_heading_two_left">
-            Board
+            Board 
             <div className="board_heading_two_left_addpeople">
               <img alt="analytics" src={PeoplePNG} />
               <div

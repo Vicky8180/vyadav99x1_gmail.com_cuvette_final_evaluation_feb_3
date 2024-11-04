@@ -5,10 +5,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import AddTaskPNG from "../../Assets/add2.png";
 import DeletePNG from "../../Assets/Delete.png";
 import AssignTo from "../../Services/AssignTo";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Loader from "../Loader/Loader";
 import Toast from "../../Services/Toast/Toast";
+import { addItem } from "../../Store/Slices/TriggerringRendering";
 
 export default function TaskCreate({
   close,
@@ -26,6 +27,9 @@ export default function TaskCreate({
   const [title, setTitle] = useState(data ? data.title : "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  
+  const dispatch=useDispatch()
+
 
   const isISOFormat = (date) =>
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(date);
@@ -80,6 +84,8 @@ export default function TaskCreate({
       onTaskCreated();
       close();
       setItems(items)
+
+      dispatch(addItem())
 
       Toast(
         isUpdate ? "Task updated successfully!" : "Task created successfully!",
