@@ -55,7 +55,7 @@ const Task_Schema = new mongoose.Schema(
     creator:{   type: mongoose.Schema.Types.ObjectId, 
       ref: "user" },
     
-      backgroundColor:{ type: String, required: true, default:"white" }
+  backgroundColor:{ type: String, required: true, default:"white" }
   },
   
   { 

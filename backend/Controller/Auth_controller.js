@@ -64,8 +64,10 @@ const Register = async (req, res) => {
     });
   }
 };
+let usersCache = {};
 
 const Login = async (req, res) => {
+  usersCache={}
   try {
     const { email, password } = req.body;
 
@@ -104,7 +106,6 @@ const Login = async (req, res) => {
   }
 };
 
-let usersCache = {};
 
 const searchUsers = async (req, res) => {
   try {
